@@ -1,6 +1,6 @@
 window.onload = function() {
   chrome.storage.sync.get("value", function(items) {
-    if (!chrome.runtime.error) {
+    if ((!chrome.runtime.error) && (items.value > 0)) {
       document.getElementById("input").value = items.value;
     }
   });
