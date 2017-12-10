@@ -1,0 +1,33 @@
+<!doctype html>
+<!--
+ This page is shown when the extension button is clicked, because the
+ "browser_action" field in manifest.json contains the "default_popup" key with
+ value "popup.html".
+ -->
+<html>
+  <head>
+    <title>Date Offset Setting Popup</title>
+    <style type="text/css">
+      body {
+        margin: 10px;
+        <!-- white-space: nowrap;-->
+      }
+
+      h1 {
+        font-size: 15px;
+      }
+
+    </style>
+
+
+  </head>
+
+  <body>
+    <h1>Date Offset</h1>
+    <div class="form-group">
+      <label for="DaysBack">How many days to go back: </label>
+      <input id="input" name="DaysBack" type="number" min="0" value="0" step="1"/>
+      <script src="popup.js"></script>
+    </div>
+  </body>
+</html>

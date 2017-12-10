@@ -1,0 +1,27 @@
+{
+  // Required
+  "manifest_version": 2,
+  "name": "Jira Log Work TODAY",
+  "description": "Inserts the computer's date and 12:00 PM time when loging work on Jira.",
+  "version": "0.1",
+  "icons": {
+    "128": "data/big.png"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://hansentechnologies.atlassian.net/*"],
+      "js": ["script.js"]
+    }
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "page_action": {
+    "default_popup": "popup.html"
+  }
+
+}
