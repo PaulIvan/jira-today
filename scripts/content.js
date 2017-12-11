@@ -14,29 +14,35 @@ let targetNode = document.body;
 // Options for the observer (which mutations to observe)
 let config = {childList: true};
 
+// custom dateformat function
+let formatDate = function(date, offset) {
+  const monthNames = [
+    "Jan", "Feb", "Mar",
+    "Apr", "May", "Jun", "Jul",
+    "Aug", "Sep", "Oct",
+    "Nov", "Dec"
+  ];
+
+  date.setDate(date.getDate() - offset);
+
+  let day = date.getDate();
+  let monthIndex = date.getMonth();
+  let year = date.getYear().toString().substr(-2);
+
+  return day + '/' + monthNames[monthIndex] + '/' + year + ' ' + '12:00 PM';
+};
+
 // Callback function to execute when mutations are observed
 let callback = function(mutationsList) {
-  for(var mutation of mutationsList) {
+  for(let mutation of mutationsList) {
     if (mutation.type == 'childList') {
       let dateInputBox = document.getElementById('log-work-date-logged-date-picker');
 
       if ((dateInputBox !== null) && (!dateInputBox.touched)) {
         //prepare date and custom jira format.
         let date = new Date();
-
-        date.setDate(date.getDate() - offset);
-        date.setHours(12);
-        date.setMinutes(0);
-
-        let dateOptions = {
-          year: '2-digit',
-          month: 'short',
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        }
         //update value and set flag.
-        dateInputBox.value = date.toLocaleDateString('en-GB', dateOptions);
+        dateInputBox.value = formatDate(date, offset);
         dateInputBox.touched = true;
       }
     }
