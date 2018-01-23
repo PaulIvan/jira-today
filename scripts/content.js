@@ -1,13 +1,5 @@
 //retrieve the saved Offset
-let offset = 0;
-document.body.onload = function() {
-  chrome.storage.sync.get("value", function(items) {
-    if ((!chrome.runtime.error) && (items.value > 0)) {
-      offset = items.value;
-    }
-  });
-}
-
+let dateInputBox;
 // Select the node that will be observed for mutations
 let targetNode = document.body;
 
@@ -32,25 +24,36 @@ let formatDate = function(date, offset) {
   return day + '/' + monthNames[monthIndex] + '/' + year + ' ' + '12:00 PM';
 };
 
+
+let storageCallback = function (items) {
+  let offset = 0;
+
+  if ((!chrome.runtime.error) && (items.value > 0)) {
+    offset = items.value;
+  }
+  
+  //prepare date and custom jira format.
+  let date = new Date();
+  //update value and set flag.
+  dateInputBox.value = formatDate(date, offset);
+  dateInputBox.touched = true;
+};
+
 // Callback function to execute when mutations are observed
-let callback = function(mutationsList) {
+let observerCallback = function(mutationsList) {
   for(let mutation of mutationsList) {
     if (mutation.type == 'childList') {
-      let dateInputBox = document.getElementById('log-work-date-logged-date-picker');
+      dateInputBox = document.getElementById('log-work-date-logged-date-picker');
 
       if ((dateInputBox !== null) && (!dateInputBox.touched)) {
-        //prepare date and custom jira format.
-        let date = new Date();
-        //update value and set flag.
-        dateInputBox.value = formatDate(date, offset);
-        dateInputBox.touched = true;
+        chrome.storage.sync.get("value", storageCallback); 
       }
     }
   }
 };
 
 // Create an observer instance linked to the callback function
-let observer = new MutationObserver(callback);
+let observer = new MutationObserver(observerCallback);
 
 // Start observing the target node for configured mutations
 observer.observe(targetNode, config);
